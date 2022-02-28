@@ -1,8 +1,4 @@
-export interface ITodoList {
-    todos: ITodos[]
-}
-
 export interface ITodos {
-    id: number;
+    id: string;
     body: string;
   }

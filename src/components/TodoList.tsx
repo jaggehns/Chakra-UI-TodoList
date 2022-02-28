@@ -6,15 +6,25 @@ import {
   IconButton,
   StackDivider,
   Spacer,
+  Badge,
 } from "@chakra-ui/react";
 import { FaTrash } from "react-icons/fa";
 import { ITodos } from "../interfaces/ITodos";
 
 interface Props {
   todos: ITodos[];
+  deleteTodo: (id: string) => void;
 }
 
-const TodoList: FC<Props> = ({ todos }) => {
+const TodoList: FC<Props> = ({ todos, deleteTodo }) => {
+  if (!todos.length) {
+    return (
+      <Badge colorScheme="green" p="4" m="4" borderRadius="lg">
+        No Todos
+      </Badge>
+    );
+  }
+
   return (
     <VStack
       divider={<StackDivider />}
@@ -35,6 +45,7 @@ const TodoList: FC<Props> = ({ todos }) => {
             aria-label="delete-icon"
             icon={<FaTrash />}
             isRound={true}
+            onClick={() => deleteTodo(todo.id)}
           ></IconButton>
         </HStack>
       ))}

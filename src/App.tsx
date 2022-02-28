@@ -1,23 +1,33 @@
-import React from "react";
-import { Heading, VStack, IconButton } from "@chakra-ui/react";
+import React, { useState, useEffect } from "react";
+import { Heading, VStack, IconButton, useColorMode } from "@chakra-ui/react";
 import TodoList from "./components/TodoList";
 import AddTodos from "./components/AddTodos";
 import { FaSun, FaMoon } from "react-icons/fa";
-import { ITodoList } from "./interfaces/ITodos";
+import { ITodos } from "./interfaces/ITodos";
 
 function App() {
-  const todoList: ITodoList = {
-    todos: [
-      {
-        id: 1,
-        body: "buy eggs",
-      },
-      {
-        id: 2,
-        body: "buy milk",
-      },
-    ],
+  const [todos, setTodos] = useState<ITodos[]>(
+    () => JSON.parse(localStorage.getItem("todos") || "[]") || []
+  );
+
+  const deleteTodo = (id: string): void => {
+    const newTodos = todos.filter((todo) => {
+      return todo.id !== id;
+    });
+    setTodos([...newTodos]);
   };
+
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
+
+  const addTodo = (todo: ITodos): void => {
+    //spreading to create a new ref + to add new todo
+    setTodos([...todos, todo]);
+    // localStorage.setItem('todos', )
+  };
+
+  const { colorMode, toggleColorMode } = useColorMode();
 
   return (
     //VStack : dflex, flexD column, alignItems center
@@ -25,10 +35,11 @@ function App() {
     <VStack p={4}>
       <IconButton
         aria-label="mode-icon"
-        icon={<FaSun />}
+        icon={colorMode === "light" ? <FaSun /> : <FaMoon />}
         isRound={true}
         size="lg"
         alignSelf="flex-end"
+        onClick={toggleColorMode}
       />
       <Heading
         mb="32px !important"
@@ -39,8 +50,8 @@ function App() {
       >
         Todo Application
       </Heading>
-      <TodoList {...todoList} />
-      <AddTodos />
+      <TodoList todos={todos} deleteTodo={deleteTodo} />
+      <AddTodos addTodo={addTodo} />
     </VStack>
   );
 }
