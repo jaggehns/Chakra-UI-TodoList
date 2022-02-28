@@ -1,25 +1,47 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Heading, VStack, IconButton } from "@chakra-ui/react";
+import TodoList from "./components/TodoList";
+import AddTodos from "./components/AddTodos";
+import { FaSun, FaMoon } from "react-icons/fa";
+import { ITodoList } from "./interfaces/ITodos";
 
 function App() {
+  const todoList: ITodoList = {
+    todos: [
+      {
+        id: 1,
+        body: "buy eggs",
+      },
+      {
+        id: 2,
+        body: "buy milk",
+      },
+    ],
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    //VStack : dflex, flexD column, alignItems center
+    //cannot add margin to child of a Stack, must use !important
+    <VStack p={4}>
+      <IconButton
+        aria-label="mode-icon"
+        icon={<FaSun />}
+        isRound={true}
+        size="lg"
+        alignSelf="flex-end"
+      />
+      <Heading
+        mb="32px !important"
+        fontWeight="extrabold"
+        size="2xl"
+        bgGradient="linear(to-r, pink.500, pink.300, blue.500)"
+        bgClip="text"
+      >
+        Todo Application
+      </Heading>
+      <TodoList {...todoList} />
+      <AddTodos />
+    </VStack>
   );
 }
 
